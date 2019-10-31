@@ -97,17 +97,17 @@ func (p *provider) Create(ctx context.Context, opts autoscaler.InstanceCreateOpt
 	results, err := client.RunInstances(in)
 	if err != nil {
 
-		if p.spotInstance == "spot-first" {
-			in.InstanceMarketOptions = nil
+		if p.spotInstance != "spot-first" {
+			logger.Error().
+				Err(err).
+				Msg("instance create failed")
+			return nil, err
+		}
 
-			results, err = client.RunInstances(in)
-			if err != nil {
-				logger.Error().
-					Err(err).
-					Msg("instance create failed")
-				return nil, err
-			}
-		} else {
+		in.InstanceMarketOptions = nil
+
+		results, err = client.RunInstances(in)
+		if err != nil {
 			logger.Error().
 				Err(err).
 				Msg("instance create failed")
