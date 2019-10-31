@@ -107,12 +107,12 @@ func (p *provider) Create(ctx context.Context, opts autoscaler.InstanceCreateOpt
 					Msg("instance create failed")
 				return nil, err
 			}
+		} else {
+			logger.Error().
+				Err(err).
+				Msg("instance create failed")
+			return nil, err
 		}
-
-		logger.Error().
-			Err(err).
-			Msg("instance create failed")
-		return nil, err
 	}
 
 	amazonInstance := results.Instances[0]
