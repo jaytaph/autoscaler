@@ -10,7 +10,7 @@ import (
 	"github.com/drone/autoscaler/drivers/internal/userdata"
 )
 
-// Option configures a Digital Ocean provider option.
+// Option configures a Amazon AWS provider option.
 type Option func(*provider)
 
 // WithDeviceName returns an option to set the device name.
@@ -132,6 +132,6 @@ func WithIamProfileArn(t string) Option {
 // WithMarketType returns an option to set the instance market type.
 func WithMarketType(t string) Option {
 	return func(p *provider) {
-		p.spotInstance = t == "spot"
+		p.spotInstance = t
 	}
 }

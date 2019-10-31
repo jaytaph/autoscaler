@@ -33,7 +33,7 @@ type provider struct {
 	groups        []string
 	tags          map[string]string
 	iamProfileArn string
-	spotInstance  bool
+	spotInstance  string
 }
 
 func (p *provider) getClient() *ec2.EC2 {

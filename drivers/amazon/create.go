@@ -40,7 +40,7 @@ func (p *provider) Create(ctx context.Context, opts autoscaler.InstanceCreateOpt
 
 	var marketOptions *ec2.InstanceMarketOptionsRequest
 
-	if p.spotInstance == true {
+	if p.spotInstance == "spot" || p.spotInstance == "spot-first" {
 		marketOptions = &ec2.InstanceMarketOptionsRequest{
 			MarketType: aws.String("spot"),
 		}
@@ -96,6 +96,19 @@ func (p *provider) Create(ctx context.Context, opts autoscaler.InstanceCreateOpt
 
 	results, err := client.RunInstances(in)
 	if err != nil {
+
+		if p.spotInstance == "spot-first" {
+			in.InstanceMarketOptions = nil
+
+			results, err = client.RunInstances(in)
+			if err != nil {
+				logger.Error().
+					Err(err).
+					Msg("instance create failed")
+				return nil, err
+			}
+		}
+
 		logger.Error().
 			Err(err).
 			Msg("instance create failed")
